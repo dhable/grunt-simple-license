@@ -26,7 +26,9 @@ In your project's Gruntfile, add a section named `license` to the data object pa
 grunt.initConfig({
   license: {
     options: {
-      overrideFile: ".license"
+      overrideFile: ".license",
+      output: "licenseReport.json",
+      prettyOutput: false
     }
   }
 });
@@ -44,6 +46,16 @@ have license data.
 
 You should really, really, really try to avoid using an override file. Instead, you should consider making a pull
 request to the third party module with the SPDX license info so the overall ecosystem is improved.
+
+#### options.output
+Type: `String`
+
+The file you would like to output the JSON license map to.
+
+#### options.prettyOutput
+Type: `Boolean`
+
+Set to true if you would like the JSON object in the output file to be pretty printed. Defaults to false.
 
 
 ### Usage Examples

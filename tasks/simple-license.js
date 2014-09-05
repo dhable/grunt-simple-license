@@ -118,9 +118,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask("license", "Generate licensing info based on package.json files", function() {
     var options = this.options({
-       overrideFile: ".license"
+       overrideFile: ".license",
+       output: "licenseReport.json",
+       prettyOutput: false
     });
-
 
     var done = this.async();
 
@@ -136,13 +137,14 @@ module.exports = function(grunt) {
               bowerLicenses = results[2],
               finalLicenses = _.extend({}, npmLicenses, bowerLicenses, overrideLicenses);
 
-          console.log(finalLicenses);
+          grunt.log.writeln("Writing module license report to " + options.output);
+          grunt.file.write(options.output,
+                           JSON.stringify(finalLicenses, null, (options.prettyOutput ? "\t" : null) ));
        } 
        else {
           grunt.log.error(err);
        }
 
-    
        done(err);
     });
 
