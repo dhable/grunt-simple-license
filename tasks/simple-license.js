@@ -81,26 +81,71 @@ var generateBowerLicenseInfo = function(grunt, cb) {
 
 
 /**
+ * Loads up the definitions in the license override file. The override file should be used to correct
+ * local projects without committing the license in a manifest file.
  *
+ * @param grunt The instance of the grunt system.
+ * @param options The plugin options object that contains values defined in the grunt file or default values.
+ * @param cb The node.js standard callback to use for returning information to the caller.
+ * @returns Object of dependency names and license info from override file. Names are of the form modulename@version (via callback)
+ */
+var loadOverrideDefinitions = function(grunt, options, cb) {
+   var err, overrideData;
+
+   if(grunt.file.exists(options.overrideFile)) {
+      try {
+         overrideData = grunt.file.readJSON(options.overrideFile)
+         if(!_.isEmpty(overrideData)) {
+            grunt.log.writeln("The license override file is an anti-pattern. Let's work on getting license info in package manifest files.");
+         }
+      }
+      catch(ex) {
+         grunt.log.debug("Is the .license file encoded using strict JSON encoding?");
+         err = ex;
+      }
+   }
+
+   cb(err, overrideData);
+};
+
+
+/**
+ * Entry point for the plugin.
+ *
+ * @param grunt The instance of the grunt system.
  */
 module.exports = function(grunt) {
 
   grunt.registerTask("license", "Generate licensing info based on package.json files", function() {
     var options = this.options({
+       overrideFile: ".license"
     });
 
 
     var done = this.async();
 
     async.parallel([
+       _.partial(loadOverrideDefinitions, grunt, options),
        _.partial(generateNpmLicenseInfo, grunt),
        _.partial(generateBowerLicenseInfo, grunt)
     ],
     function(err, results) {
-       var licenses = _.extend({}, results[0], results[1]);
-       console.log(licenses);
+       if(!err) {
+          var overrideLicenses = results[0],
+              npmLicenses = results[1],
+              bowerLicenses = results[2],
+              finalLicenses = _.extend({}, npmLicenses, bowerLicenses, overrideLicenses);
+
+          console.log(finalLicenses);
+       } 
+       else {
+          grunt.log.error(err);
+       }
+
+    
+       done(err);
     });
 
-  });
 
+  });
 };

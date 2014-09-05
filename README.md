@@ -20,14 +20,31 @@ grunt.loadNpmTasks('grunt-simple-license');
 ## The "license" task
 
 ### Overview
-In your project's Gruntfile, add a section named `waitfor` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `license` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
   license: {
+    options: {
+      overrideFile: ".license"
+    }
   }
 });
 ```
+
+### Options
+
+#### options.overrideFileA
+Type: `String`
+
+Relative path and filename of the license info override file. These defintions will be merged into the final
+license report object before it gets output. If you're in an environment that needs to account for all third party
+licenses and a module does not define a license, then you can add the definition in this file to make the reports
+have license data.
+
+You should really, really, really try to avoid using an override file. Instead, you should consider making a pull
+request to the third party module with the SPDX license info so the overall ecosystem is improved.
+
 
 ### Usage Examples
 
