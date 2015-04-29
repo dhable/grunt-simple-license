@@ -36,7 +36,7 @@ grunt.initConfig({
 
 ### Options
 
-#### options.overrideFileA
+#### options.overrideFile
 Type: `String`
 
 Relative path and filename of the license info override file. These defintions will be merged into the final
