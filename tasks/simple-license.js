@@ -48,7 +48,7 @@ var generateNpmLicenseInfo = function(grunt, cb) {
 
 
 /**
- * Walks thr bower dependencies looking for license information.
+ * Walks the bower dependencies looking for license information.
  * 
  * @param grunt The instance of the grunt system.
  * @param cb The node.js standard callback to use for returning information to the caller.
